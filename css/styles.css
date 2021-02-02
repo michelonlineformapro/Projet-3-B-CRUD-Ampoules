@@ -1,0 +1,13 @@
+html{
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+/*BACKGROUR DES CONTENEUR*/
+.bg-content{
+    margin-top: 10%;
+    background-color: #1d5e26;
+    color: orange;
+    padding: 20px;
+}
