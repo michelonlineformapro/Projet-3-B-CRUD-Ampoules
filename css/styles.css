@@ -3,6 +3,12 @@ html{
     margin: 0;
     padding: 0;
 }
+body{
+    color:orange!important;
+}
+.table{
+    color:orange!important;
+}
 
 /*BACKGROUR DES CONTENEUR*/
 .bg-content{
