@@ -46,9 +46,15 @@ if(isset($_POST['prix_ampoule']) && !empty($_POST['prix_ampoule'])){
 }
 
 if(isset($_POST['concierge_id']) && !empty($_POST['concierge_id'])){
-    $concierge_id = htmlspecialchars(strip_tags($_POST['concierge_id']));
+    $concierge_id = $_POST['concierge_id'];
 }else{
-    echo "Erreur: merci de remplir le champ date";
+    echo "Erreur: merci de remplir le champ concièrge";
+}
+
+if(isset($_POST['categories_id']) && !empty($_POST['categories_id'])){
+    $categories_id = htmlspecialchars(strip_tags($_POST['categories_id']));
+}else{
+    echo "Erreur: merci de remplir le champ type d'ampoule";
 }
 
 
@@ -56,7 +62,7 @@ if(isset($_POST['concierge_id']) && !empty($_POST['concierge_id'])){
 
 
 //2
-$sql = "INSERT INTO ampoules (date_changement, etage, position_ampoule, prix_ampoule, concierge_id) VALUES (?,?,?,?,?)";
+$sql = "INSERT INTO ampoules (date_changement, etage, position_ampoule, prix_ampoule, concierge_id, categories_id) VALUES (?,?,?,?,?,?)";
 //3-a
 $request = $db->prepare($sql);
 //3-b
@@ -65,8 +71,12 @@ $request->bindParam(2,$etage);
 $request->bindParam(3,$position_ampoule);
 $request->bindParam(4,$prix_ampoule);
 $request->bindParam(5, $concierge_id);
+$request->bindParam(6, $categories_id);
 
-$resultat = $request->execute(array($date_changement, $etage,$position_ampoule, $prix_ampoule, $concierge_id));
+var_dump($concierge_id);
+
+
+$resultat = $request->execute(array($date_changement, $etage,$position_ampoule, $prix_ampoule, $concierge_id, $categories_id));
 
 
 if($resultat){

@@ -16,8 +16,8 @@ try {
 }
 
 //LA requète SQL de selection de toutes les opérations
-
-$sql = "SELECT * FROM ampoules INNER JOIN concierges ON concierges.id_concierge = ampoules.concierge_id  ORDER BY date_changement DESC";
+//Ici selection sur la table ampoules puis selction de la table concièrges ou la cle primaire (id_concierge) est = a la clé etrangère de la table ampoules (concierge_id)
+$sql = "SELECT * FROM ampoules INNER JOIN concierges ON concierges.id_concierge = ampoules.concierge_id INNER JOIN categories ON categories.id_categories = ampoules.categories_id  ORDER BY date_changement DESC";
 //Stock de la requète dans une variable = connexion + fonction fléchée query + requète SQL
 $resultat = $db->query($sql);
 
@@ -81,13 +81,27 @@ $resultat = $db->query($sql);
                            <div class="form-group">
                                <label for="concierge_id">Email du conciérge</label>
 
-                               <select class="form-control" id="etage" name="position_ampoule">
+                               <select class="form-control" id="concierge_id" name="concierge_id">
                                <?php
                                foreach ($db->query("SELECT * FROM concierges") as $row){
                                ?>
-                                       <option><?= $row['email_concierge'] ?></option>
+                                       <option value="<?= $row['id_concierge'] ?>"><?= $row['email_concierge'] ?></option>
                                    <?php
                                }
+                                   ?>
+                               </select>
+                           </div>
+
+                           <div class="form-group">
+                               <label for="categories_id">Email du conciérge</label>
+
+                               <select class="form-control" id="categories_id" name="categories_id">
+                                   <?php
+                                   foreach ($db->query("SELECT * FROM categories") as $row){
+                                       ?>
+                                       <option value="<?= $row['id_categories'] ?>"><?= $row['type_ampoule'] ?></option>
+                                       <?php
+                                   }
                                    ?>
                                </select>
                            </div>
@@ -117,6 +131,7 @@ $resultat = $db->query($sql);
             <th>Position dans le couloir</th>
             <th>Prix</th>
             <th>Email du concièrge</th>
+            <th>Type d'ampoule</th>
             <th>Détails</th>
             <th>Mise à jour</th>
             <th>Supprimer</th>
@@ -138,6 +153,7 @@ $resultat = $db->query($sql);
             <td><?= $row['position_ampoule'] ?></td>
             <td><?= $row['prix_ampoule'] ?> €</td>
             <td><?= $row['email_concierge'] ?></td>
+            <td><?= $row['type_ampoule'] ?></td>
 
             <td>
                 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#detailsAmpoule<?= $row['id_ampoule'] ?>">
