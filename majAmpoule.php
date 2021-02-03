@@ -1,11 +1,14 @@
 <?php
-//1 - connexione pdo base de données
-// 2 - ecrire la requète SQL
-// 3 -a requète préparée
-// 3-b lier les paramètre (bind)
-//4 executer la requète (array)
-ob_start();
-$title = "ACCUEIL CRUD AMPOULES";
+
+/**
+ * 1 - connexiona la base de donnée PDO
+ *
+ * A - Recupérer les champs du formulaire
+ * 2 - requète en langage SQL
+ * 3 - requète php préparée
+ * 4 - bind des elements (lier)
+ * 5 - executer la requète
+ */
 
 //Connexion a PDO mySQL
 $user = "root";
@@ -16,10 +19,11 @@ try {
     $db = new PDO("mysql:host=localhost;dbname=ecommerce;charset=utf8", $user, $pass);
     $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     //echo "COnnexion a pdo mysql";
-} catch (PDOException $exception) {
-    echo "Erreur de connexion a PDO MySQL " . $exception->getMessage();
+}catch (PDOException $exception){
+    echo "Erreur de connexion a PDO MySQL ". $exception->getMessage();
 }
-//Recupération des element du dormulaire
+
+//Champ du formulaire
 
 if(isset($_POST['date_changement']) && !empty($_POST['date_changement'])){
     $date_changement = htmlspecialchars(strip_tags($_POST['date_changement']));
@@ -45,37 +49,26 @@ if(isset($_POST['prix_ampoule']) && !empty($_POST['prix_ampoule'])){
     echo "Erreur: merci de remplir le champ date";
 }
 
-if(isset($_POST['concierge_id']) && !empty($_POST['concierge_id'])){
-    $concierge_id = htmlspecialchars(strip_tags($_POST['concierge_id']));
-}else{
-    echo "Erreur: merci de remplir le champ date";
-}
+//requte sql
+$sql = "UPDATE ampoules SET date_changement = ?, etage = ?, position_ampoule = ?, prix_ampoule = ? WHERE id_ampoule = ?";
 
+$update = $db->prepare($sql);
 
+//Lier les element
+$update->bindParam(1, $date_changement);
+$update->bindParam(2, $etage);
+$update->bindParam(3, $position_ampoule);
+$update->bindParam(4, $prix_ampoule);
+$id_maj = $_GET['majID'];
 
-
-
-//2
-$sql = "INSERT INTO ampoules (date_changement, etage, position_ampoule, prix_ampoule, concierge_id) VALUES (?,?,?,?,?)";
-//3-a
-$request = $db->prepare($sql);
-//3-b
-$request->bindParam(1,$date_changement);
-$request->bindParam(2,$etage);
-$request->bindParam(3,$position_ampoule);
-$request->bindParam(4,$prix_ampoule);
-$request->bindParam(5, $concierge_id);
-
-$resultat = $request->execute(array($date_changement, $etage,$position_ampoule, $prix_ampoule, $concierge_id));
-
+$resultat = $update->execute(array($date_changement, $etage, $position_ampoule, $prix_ampoule, $id_maj));
 
 if($resultat){
-    echo "Le produit est bien ajouté";
+    echo "c bien";
     header("Location:http://localhost/Ampoules/listeAmpoule.php");
+}else{
+    echo "Une erreur est survenue durant la mise a jour";
 }
-echo "Erreur le formulaire est mal rempli";
 
 
-$content = ob_get_clean();
-require "template.php";
 
