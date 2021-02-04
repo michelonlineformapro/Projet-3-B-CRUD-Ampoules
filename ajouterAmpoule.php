@@ -1,11 +1,11 @@
 <?php
-//1 - connexione pdo base de données
+//1 - connexion pdo base de données
 // 2 - ecrire la requète SQL
-// 3 -a requète préparée
-// 3-b lier les paramètre (bind)
-//4 executer la requète (array)
+// 3 - faire un requète préparée (ou query pour de lecture)
+// 3-   binder lier les paramètre (bind)
+//4     executer la requète (array)
 ob_start();
-$title = "ACCUEIL CRUD AMPOULES";
+$title = "AJOUTER CRUD AMPOULES";
 
 //Connexion a PDO mySQL
 $user = "root";
@@ -22,19 +22,19 @@ try {
 //Recupération des element du dormulaire
 
 if(isset($_POST['date_changement']) && !empty($_POST['date_changement'])){
-    $date_changement = htmlspecialchars(strip_tags($_POST['date_changement']));
+    $date_changement = $_POST['date_changement'];
 }else{
     echo "Erreur: merci de remplir le champ date";
 }
 
 if(isset($_POST['etage']) && !empty($_POST['etage'])){
-    $etage = htmlspecialchars(strip_tags($_POST['etage']));
+    $etage = $_POST['etage'];
 }else{
     echo "Erreur: merci de remplir le champ etage";
 }
 
 if(isset($_POST['position_ampoule']) && !empty($_POST['position_ampoule'])){
-    $position_ampoule = htmlspecialchars(strip_tags($_POST['position_ampoule']));
+    $position_ampoule = $_POST['position_ampoule'];
 }else{
     echo "Erreur: merci de remplir le champ position";
 }
@@ -52,13 +52,10 @@ if(isset($_POST['concierge_id']) && !empty($_POST['concierge_id'])){
 }
 
 if(isset($_POST['categories_id']) && !empty($_POST['categories_id'])){
-    $categories_id = htmlspecialchars(strip_tags($_POST['categories_id']));
+    $categories_id = $_POST['categories_id'];
 }else{
     echo "Erreur: merci de remplir le champ type d'ampoule";
 }
-
-
-
 
 
 //2
@@ -72,18 +69,15 @@ $request->bindParam(3,$position_ampoule);
 $request->bindParam(4,$prix_ampoule);
 $request->bindParam(5, $concierge_id);
 $request->bindParam(6, $categories_id);
-
 var_dump($concierge_id);
-
 
 $resultat = $request->execute(array($date_changement, $etage,$position_ampoule, $prix_ampoule, $concierge_id, $categories_id));
 
 
 if($resultat){
-    echo "Le produit est bien ajouté";
     header("Location:http://localhost/Ampoules/listeAmpoule.php");
 }
-echo "Erreur le formulaire est mal rempli";
+echo "<p>Erreur le formulaire est mal rempli</p>";
 
 
 $content = ob_get_clean();

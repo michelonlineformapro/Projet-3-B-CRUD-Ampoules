@@ -1,0 +1,14 @@
+{
+    "name": "m.michel/ampoules",
+    "description": "CRUD ampoule pour un conci\u0000rges",
+    "authors": [
+        {
+            "name": "michel michael",
+            "email": "m.michel@onlineformapro.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "pagerfanta/pagerfanta": "2.x-dev"
+    }
+}

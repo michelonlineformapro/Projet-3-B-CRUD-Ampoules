@@ -4,7 +4,7 @@ $title = "CONNEXION CRUD AMPOULES";
 ?>
 
 <div class="bg-content">
-    <form action="listeAmpoule.php" method="post">
+    <form action="listeAmpoule.php?page=1" method="post">
 
         <div class="form-group">
             <label for="email">Email</label>

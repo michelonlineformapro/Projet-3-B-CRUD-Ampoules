@@ -1,5 +1,11 @@
 <?php
+
+use Pagerfanta\Adapter\ArrayAdapter;
+use Pagerfanta\Pagerfanta;
+
+
 ob_start();
+require "vendor/autoload.php";
 $title = "ACCUEIL CRUD AMPOULES";
 
 //Connexion a PDO mySQL
@@ -14,18 +20,30 @@ try {
 }catch (PDOException $exception){
     echo "Erreur de connexion a PDO MySQL ". $exception->getMessage();
 }
+//Pagination creation d'un routing page?= 1 2 3 4 5 6 etc...
+if(isset($_GET['page'])){
+    $page = $_GET['page'];
+}else{
+    $page = "page=1";
+}
+//Nombre d'element affiché par page
+$limite = 2;
+//Valeur de départ  = $âge courante - 1 * limite (ici 2)
+$debut = ($page - 1) * $limite;
 
 //LA requète SQL de selection de toutes les opérations
-//Ici selection sur la table ampoules puis selction de la table concièrges ou la cle primaire (id_concierge) est = a la clé etrangère de la table ampoules (concierge_id)
-$sql = "SELECT * FROM ampoules INNER JOIN concierges ON concierges.id_concierge = ampoules.concierge_id INNER JOIN categories ON categories.id_categories = ampoules.categories_id  ORDER BY date_changement DESC";
+//Ici selection sur la table ampoules puis selction de la table concièrges ou la cle primaire (id_concierge) est = a la clé etrangère de la table ampoules (concierge_id)  AJOUT de limite dynamique et offset pour le depart
+$sql = "SELECT * FROM ampoules INNER JOIN concierges ON concierges.id_concierge = ampoules.concierge_id INNER JOIN categories ON categories.id_categories = ampoules.categories_id  ORDER BY date_changement DESC LIMIT {$limite} OFFSET {$debut}";
 //Stock de la requète dans une variable = connexion + fonction fléchée query + requète SQL
 $resultat = $db->query($sql);
+
 
 ?>
 <div class="bg-content">
 <h1 class="text-info text-center">GESTION DES AMPOULES</h1>
 
     <div class="text-center">
+        <!--ICI data target prend un hashtag # qui fait reference a la fenètre modal qui cachée  et appel id de la fenètre modal -->
         <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#ajouterAmpoule">
             Ajouter une opération
         </button>
@@ -44,6 +62,7 @@ $resultat = $db->query($sql);
                        <form action="ajouterAmpoule.php" method="post">
                            <div class="form-group">
                                <label for="date_changement"></label>
+                               <!--Ici le type date pour creer un champ avec un date picker-->
                                <input type="date" class="form-control" name="date_changement" id="date_changement">
                            </div>
                            <div class="form-group">
@@ -85,6 +104,7 @@ $resultat = $db->query($sql);
                                <?php
                                foreach ($db->query("SELECT * FROM concierges") as $row){
                                ?>
+                                       <!--ici la value enrigistré est bien un entier dans la table ampoules (concièrge_id) et on affiche toutes les valeurs de la table concièrge-->
                                        <option value="<?= $row['id_concierge'] ?>"><?= $row['email_concierge'] ?></option>
                                    <?php
                                }
@@ -93,7 +113,7 @@ $resultat = $db->query($sql);
                            </div>
 
                            <div class="form-group">
-                               <label for="categories_id">Email du conciérge</label>
+                               <label for="categories_id">Type d'ampoule</label>
 
                                <select class="form-control" id="categories_id" name="categories_id">
                                    <?php
@@ -109,9 +129,6 @@ $resultat = $db->query($sql);
                            <div class="form-group">
                                <button type="submit" class="btn btn-info">Ajouter l'opération</button>
                            </div>
-
-
-
                        </form>
                     </div>
                     <div class="modal-footer">
@@ -140,11 +157,8 @@ $resultat = $db->query($sql);
 
     <tbody>
     <?php
-
-
         foreach ($resultat as $row){
             $date_formater = new DateTime($row['date_changement']);
-
       ?>
         <tr>
             <td><?= $row['id_ampoule'] ?></td>
@@ -154,8 +168,6 @@ $resultat = $db->query($sql);
             <td><?= $row['prix_ampoule'] ?> €</td>
             <td><?= $row['email_concierge'] ?></td>
             <td><?= $row['type_ampoule'] ?></td>
-
-
             <td>
                 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#detailsAmpoule<?= $row['id_ampoule'] ?>">
                     Détails de l'opération
@@ -179,8 +191,6 @@ $resultat = $db->query($sql);
                                     <li><?= "Position ampoule : " .$row['position_ampoule'] ?></li>
                                     <li><?= "Prix : " .$row['prix_ampoule'] ?> €</li>
                                 </ul>
-
-
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
@@ -214,7 +224,7 @@ $resultat = $db->query($sql);
                     </div>
                 </div>
             </td>
-        <
+
 
             <!--MISE A JOUR FORMULAIRE MODAL-->
 
@@ -316,8 +326,6 @@ $resultat = $db->query($sql);
                         </div>
                     </div>
                 </div>
-
-
             </td>
         </tr>
 
@@ -326,6 +334,31 @@ $resultat = $db->query($sql);
             ?>
     </tbody>
 </table>
+    <?php
+    //Requète qui compte le nombre d'entrée
+    $resultFoundRows = $db->query('SELECT count(id_ampoule) FROM ampoules');
+    /* On doit extraire le nombre du jeu de résultat */
+    $nombredElementsTotal = $resultFoundRows->fetchColumn();
+    /* Si on est sur la première page, on n'a pas besoin d'afficher de lien
+ * vers la précédente. On va donc ne l'afficher que si on est sur une autre
+ * page que la première */
+    $nombreDePages = ceil($nombredElementsTotal / $limite);
+if ($page > 1):
+    ?><a href="?page=<?php echo $page - 1; ?>">Page précédente</a> — <?php
+endif;
+
+/* On va effectuer une boucle autant de fois que l'on a de pages */
+for ($i = 1; $i <= $nombreDePages; $i++):
+    ?><a href="?page=<?php echo $i; ?>"><?php echo $i; ?></a> <?php
+endfor;
+
+/* Avec le nombre total de pages, on peut aussi masquer le lien
+ * vers la page suivante quand on est sur la dernière */
+if ($page < $nombreDePages):
+    ?>— <a href="?page=<?php echo $page + 1; ?>">Page suivante</a><?php
+endif;
+?>
+
 
 </div>
 
