@@ -64,8 +64,7 @@ $id_maj = $_GET['majID'];
 $resultat = $update->execute(array($date_changement, $etage, $position_ampoule, $prix_ampoule, $id_maj));
 
 if($resultat){
-    echo "c bien";
-    header("Location:http://localhost/Ampoules/listeAmpoule.php");
+    header("Location:http://localhost/Ampoules/listeAmpoule.php?page=1");
 }else{
     echo "Une erreur est survenue durant la mise a jour";
 }

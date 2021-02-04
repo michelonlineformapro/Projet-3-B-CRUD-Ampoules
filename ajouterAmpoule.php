@@ -75,7 +75,7 @@ $resultat = $request->execute(array($date_changement, $etage,$position_ampoule, 
 
 
 if($resultat){
-    header("Location:http://localhost/Ampoules/listeAmpoule.php");
+    header("Location:http://localhost/Ampoules/listeAmpoule.php?page=1");
 }
 echo "<p>Erreur le formulaire est mal rempli</p>";
 

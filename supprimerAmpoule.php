@@ -31,7 +31,7 @@ $resultat = $supprimer->execute();
 
 if($resultat){
     echo "Ca marche";
-    header("Location:http://localhost/Ampoules/listeAmpoule.php");
+    header("Location:http://localhost/Ampoules/listeAmpoule.php?page=1");
 }else{
     echo "Erreur l'id n'existe pas";
 }
