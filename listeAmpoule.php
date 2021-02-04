@@ -133,8 +133,8 @@ $resultat = $db->query($sql);
             <th>Email du concièrge</th>
             <th>Type d'ampoule</th>
             <th>Détails</th>
-            <th>Mise à jour</th>
             <th>Supprimer</th>
+            <th>Mise à jour</th>
         </tr>
     </thead>
 
@@ -154,6 +154,7 @@ $resultat = $db->query($sql);
             <td><?= $row['prix_ampoule'] ?> €</td>
             <td><?= $row['email_concierge'] ?></td>
             <td><?= $row['type_ampoule'] ?></td>
+
 
             <td>
                 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#detailsAmpoule<?= $row['id_ampoule'] ?>">
@@ -188,6 +189,32 @@ $resultat = $db->query($sql);
                     </div>
                 </div>
             </td>
+            <!--SUPPRIMER UNE OPERATION-->
+            <td>
+                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteAmpoule<?= $row['id_ampoule'] ?>">
+                    Supprimer l'opération
+                </button>
+
+                <div class="modal fade" id="deleteAmpoule<?= $row['id_ampoule'] ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Détail de l'opération N° <?= $row['id_ampoule'] ?></h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <a href="supprimerAmpoule.php?supprimerID=<?= $row['id_ampoule'] ?>" class="btn btn-info">SUPPRIMER CETTE OPÉRATION</a>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </td>
+        <
 
             <!--MISE A JOUR FORMULAIRE MODAL-->
 
@@ -230,8 +257,10 @@ $resultat = $db->query($sql);
                                     </div>
 
                                     <div class="form-group">
-                                        <label for="position">Selection étage</label>
+                                        <label for="position">Selection de la position</label>
+
                                         <select class="form-control" id="etage" name="position_ampoule">
+                                            <option value="<?= $row['position_ampoule'] ?>"><?= $row['position_ampoule'] ?></option>
                                             <option value="droite">DROITE</option>
                                             <option value="gauche">GAUCHE</option>
                                             <option value="fond">FOND</option>
@@ -244,8 +273,35 @@ $resultat = $db->query($sql);
                                     </div>
 
                                     <div class="form-group">
-                                        <label for="concierge_id"></label>
-                                        <input type="text"  class="form-control" name="concierge_id" id="concierge_id">
+                                        <label for="concierge_id">Email du conciérge</label>
+
+                                        <select class="form-control" id="concierge_id" name="concierge_id">
+                                            <?php
+
+                                            ?>
+
+                                            <?php
+                                            foreach ($db->query("SELECT * FROM concierges") as $row){
+                                                ?>
+                                                <option value="<?= $row['id_concierge'] ?>"><?= $row['email_concierge'] ?></option>
+                                                <?php
+                                            }
+                                            ?>
+                                        </select>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="categories_id">Email du conciérge</label>
+
+                                        <select class="form-control" id="categories_id" name="categories_id">
+                                            <?php
+                                            foreach ($db->query("SELECT * FROM categories") as $row){
+                                                ?>
+                                                <option value="<?= $row['id_categories'] ?>"><?= $row['type_ampoule'] ?></option>
+                                                <?php
+                                            }
+                                            ?>
+                                        </select>
                                     </div>
 
                                     <div class="form-group">
@@ -263,31 +319,8 @@ $resultat = $db->query($sql);
 
 
             </td>
-            <td>
-                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteAmpoule<?= $row['id_ampoule'] ?>">
-                    Supprimer l'opération
-                </button>
-
-                <div class="modal fade" id="deleteAmpoule<?= $row['id_ampoule'] ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="exampleModalLabel">Détail de l'opération N° <?= $row['id_ampoule'] ?></h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <div class="modal-body">
-                                <a href="supprimerAmpoule.php?supprimerID=<?= $row['id_ampoule'] ?>" class="btn btn-info">SUPPRIMER CETTE OPÉRATION</a>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </td>
         </tr>
+
             <?php
             }
             ?>
