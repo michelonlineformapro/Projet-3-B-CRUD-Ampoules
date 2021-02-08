@@ -4,6 +4,7 @@ $title = "CONNEXION CRUD AMPOULES";
 ?>
 
 <div class="bg-content">
+    <h1 class="text-center text-info">Connexion</h1>
     <form action="listeAmpoule.php?page=1" method="post">
 
         <div class="form-group">
@@ -12,13 +13,17 @@ $title = "CONNEXION CRUD AMPOULES";
         </div>
 
         <div class="form-group">
-            <label for="password">Email</label>
+            <label for="password">Mot de passe</label>
             <input type="password" class="form-control" name="password" id="password"/>
         </div>
 
         <div class="form-group">
             <button type="submit" class="btn btn-outline-warning">Connexion</button>
         </div>
+
+        <a class="btn btn-outline-danger" href="inscription.php">Inscription</a>
+        <br />
+        <a href="" class="mt-5">Identifiant oublié ?</a>
 
     </form>
 </div>

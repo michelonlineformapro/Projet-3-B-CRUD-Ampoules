@@ -22,14 +22,14 @@ try {
 }
 //Pagination creation d'un routing page?= 1 2 3 4 5 6 etc...
 if(isset($_GET['page'])){
-    $page = $_GET['page'];
+    $page = $_GET['page']; //listeProduit.php?page=1
 }else{
     $page = "page=1";
 }
 //Nombre d'element affiché par page
 $limite = 2;
-//Valeur de départ  = $âge courante - 1 * limite (ici 2)
-$debut = ($page - 1) * $limite;
+//Valeur de départ  = $page courante - 1 * limite (ici 2)
+$debut = $page - 1;
 
 //LA requète SQL de selection de toutes les opérations
 //Ici selection sur la table ampoules puis selction de la table concièrges ou la cle primaire (id_concierge) est = a la clé etrangère de la table ampoules (concierge_id)  AJOUT de limite dynamique et offset pour le depart
@@ -334,9 +334,10 @@ $resultat = $db->query($sql);
             ?>
     </tbody>
 </table>
+
     <?php
     //Requète qui compte le nombre d'entrée
-    $resultFoundRows = $db->query('SELECT count(id_ampoule) FROM ampoules');
+    $resultFoundRows = $db->query('SELECT COUNT(id_ampoule) FROM ampoules');
     /* On doit extraire le nombre du jeu de résultat */
     $nombredElementsTotal = $resultFoundRows->fetchColumn();
     /* Si on est sur la première page, on n'a pas besoin d'afficher de lien
@@ -349,7 +350,7 @@ endif;
 
 /* On va effectuer une boucle autant de fois que l'on a de pages */
 for ($i = 1; $i <= $nombreDePages; $i++):
-    ?><a href="?page=<?php echo $i; ?>"><?php echo $i; ?></a> <?php
+    ?><a href="?page=<?php echo $i; ?>"><?php echo $i; ?></a><?php
 endfor;
 
 /* Avec le nombre total de pages, on peut aussi masquer le lien
