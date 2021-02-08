@@ -5,8 +5,11 @@ use Pagerfanta\Pagerfanta;
 
 
 ob_start();
+
+
 require "vendor/autoload.php";
 $title = "ACCUEIL CRUD AMPOULES";
+
 
 //Connexion a PDO mySQL
 $user = "root";
@@ -20,6 +23,21 @@ try {
 }catch (PDOException $exception){
     echo "Erreur de connexion a PDO MySQL ". $exception->getMessage();
 }
+
+//On demerar
+session_start();
+if(isset($_SESSION['connecter']) && $_SESSION['connecter'] === true){
+    echo $_SESSION['email_employe'];
+    echo "<a href='deconnexion.php' class='btn btn-info'>DECONNEXION</a>";
+
+}else{
+    header("location:http://localhost/Ampoules/");
+}
+?>
+<h1 class='text-center text-danger'>Bonjour : <?= $_SESSION['email_employe'] ?> </h1>
+
+<?php
+
 //Pagination creation d'un routing page?= 1 2 3 4 5 6 etc...
 if(isset($_GET['page'])){
     $page = $_GET['page']; //listeProduit.php?page=1
