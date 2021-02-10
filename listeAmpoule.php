@@ -77,7 +77,8 @@ $resultat = $db->query($sql);
                         </button>
                     </div>
                     <div class="modal-body">
-                       <form action="ajouterAmpoule.php" method="post">
+
+                       <form action="ajouterAmpoule.php" method="post" enctype="multipart/form-data">
                            <div class="form-group">
                                <label for="date_changement"></label>
                                <!--Ici le type date pour creer un champ avec un date picker-->
@@ -102,7 +103,7 @@ $resultat = $db->query($sql);
                            </div>
 
                            <div class="form-group">
-                               <label for="position">Selection étage</label>
+                               <label for="position">Selection position de l'ampoule</label>
                                <select class="form-control" id="etage" name="position_ampoule">
                                    <option value="droite">DROITE</option>
                                    <option value="gauche">GAUCHE</option>
@@ -144,6 +145,12 @@ $resultat = $db->query($sql);
                                </select>
                            </div>
 
+                           <!--Ajout de la photo type ampoule-->
+                           <div class="form-group">
+                               <label for="img_ampoule">Choix de la photo</label>
+                               <input type="file" class="form-control-file" id="img_ampoule" name="img_ampoule" accept="image/gif, image/jpg, image/jpeg, image/svg, image/png">
+                           </div>
+
                            <div class="form-group">
                                <button type="submit" class="btn btn-info">Ajouter l'opération</button>
                            </div>
@@ -167,6 +174,7 @@ $resultat = $db->query($sql);
             <th>Prix</th>
             <th>Email du concièrge</th>
             <th>Type d'ampoule</th>
+            <th>Image</th>
             <th>Détails</th>
             <th>Supprimer</th>
             <th>Mise à jour</th>
@@ -186,6 +194,7 @@ $resultat = $db->query($sql);
             <td><?= $row['prix_ampoule'] ?> €</td>
             <td><?= $row['email_concierge'] ?></td>
             <td><?= $row['type_ampoule'] ?></td>
+            <td><img src="<?= $row['img_ampoule'] ?>" alt="<?= $row['type_ampoule'] ?>" title="<?= $row['type_ampoule'] ?>" width="100%" </td>
             <td>
                 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#detailsAmpoule<?= $row['id_ampoule'] ?>">
                     Détails de l'opération
