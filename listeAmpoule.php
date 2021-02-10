@@ -27,8 +27,8 @@ try {
 //On demerar
 session_start();
 if(isset($_SESSION['connecter']) && $_SESSION['connecter'] === true){
-    echo $_SESSION['email_employe'];
-    echo "<a href='deconnexion.php' class='btn btn-info'>DECONNEXION</a>";
+    echo "<div class='text-center mt-3'>
+    <a href='deconnexion.php' class='btn btn-info'>DECONNEXION</a></div>";
 
 }else{
     header("location:http://localhost/Ampoules/");
@@ -57,7 +57,7 @@ $resultat = $db->query($sql);
 
 
 ?>
-<div class="bg-content">
+<div class="container">
 <h1 class="text-info text-center">GESTION DES AMPOULES</h1>
 
     <div class="text-center">
@@ -380,21 +380,30 @@ $resultat = $db->query($sql);
  * vers la précédente. On va donc ne l'afficher que si on est sur une autre
  * page que la première */
     $nombreDePages = ceil($nombredElementsTotal / $limite);
+    ?>
+    <nav aria-label="Page navigation example">
+        <ul class="pagination">
+    <?php
+
+
 if ($page > 1):
-    ?><a href="?page=<?php echo $page - 1; ?>">Page précédente</a> — <?php
+    ?><li class="page-item"><a class="page-link" href="?page=<?php echo $page - 1; ?>">Page précédente</a></li><?php
 endif;
 
 /* On va effectuer une boucle autant de fois que l'on a de pages */
 for ($i = 1; $i <= $nombreDePages; $i++):
-    ?><a href="?page=<?php echo $i; ?>"><?php echo $i; ?></a><?php
+    ?><li class="page-item"><a class="page-link" href="?page=<?php echo $i; ?>"><?php echo $i; ?></a></li><?php
 endfor;
 
 /* Avec le nombre total de pages, on peut aussi masquer le lien
  * vers la page suivante quand on est sur la dernière */
 if ($page < $nombreDePages):
-    ?>— <a href="?page=<?php echo $page + 1; ?>">Page suivante</a><?php
+    ?><li class="page-item"><a class="page-link" href="?page=<?php echo $page + 1; ?>">Page suivante</a></li><?php
 endif;
 ?>
+
+        </ul>
+    </nav>
 
 
 </div>
