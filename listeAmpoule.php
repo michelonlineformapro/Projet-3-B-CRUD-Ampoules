@@ -217,6 +217,9 @@ $resultat = $db->query($sql);
                                     <li><?= "Étage : " .$row['etage'] ?></li>
                                     <li><?= "Position ampoule : " .$row['position_ampoule'] ?></li>
                                     <li><?= "Prix : " .$row['prix_ampoule'] ?> €</li>
+                                    <li><?= "Email : " .$row['email_concierge'] ?></li>
+                                    <li><?= "Type ampoule " .$row['type_ampoule']  ?></li>
+                                    <li><img src="<?= $row['img_ampoule']  ?>" alt="" title="" width="100%" /></li>
                                 </ul>
                             </div>
                             <div class="modal-footer">
@@ -270,7 +273,7 @@ $resultat = $db->query($sql);
                                 </button>
                             </div>
                             <div class="modal-body">
-                                <form action="majAmpoule.php?majID=<?= $row['id_ampoule'] ?>" method="post">
+                                <form action="majAmpoule.php?majID=<?= $row['id_ampoule'] ?>" method="post" enctype="multipart/form-data">
                                     <div class="form-group">
                                         <label for="date_changement"></label>
                                         <input type="date" class="form-control" name="date_changement" id="date_changement">
@@ -339,6 +342,12 @@ $resultat = $db->query($sql);
                                             }
                                             ?>
                                         </select>
+                                    </div>
+
+                                    <!--Ajout de la photo type ampoule-->
+                                    <div class="form-group">
+                                        <label for="img_ampoule">Choix de la photo</label>
+                                        <input type="file" class="form-control-file" id="img_ampoule" name="img_ampoule">
                                     </div>
 
                                     <div class="form-group">
